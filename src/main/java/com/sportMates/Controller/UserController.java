@@ -21,4 +21,14 @@ public class UserController {
     public Object login(@RequestBody User user) {
         return userService.register(user);
     }
+
+    @GetMapping("/email")
+    public Object isEmailInUse(@RequestParam String email) {
+        return userService.isEmailInUse(email);
+    }
+
+    @GetMapping("/username")
+    public Object isUsernameInUse(@RequestParam String username) {
+        return userService.isUsernameInUse(username);
+    }
 }

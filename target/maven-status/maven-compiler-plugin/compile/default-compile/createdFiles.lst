@@ -6,11 +6,13 @@ com\sportMates\Service\Impl\SportServiceImpl.class
 com\sportMates\Service\UserService.class
 com\sportMates\Repository\UserRepository.class
 com\sportMates\Exception\BadRequestException.class
+com\sportMates\Controller\SportController.class
 com\sportMates\Service\Impl\EventUserServiceImpl.class
 com\sportMates\Entities\FilterEvent.class
 com\sportMates\Repository\EventRepository.class
 com\sportMates\Service\EventService.class
 com\sportMates\Controller\UserController.class
+com\sportMates\Enum\EventType.class
 com\sportMates\Entities\Event.class
 com\sportMates\Exception\UnauthorizedException.class
 com\sportMates\Repository\EventUserRepository.class

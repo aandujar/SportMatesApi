@@ -6,7 +6,6 @@ import com.sportMates.Repository.UserRepository;
 import com.sportMates.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.regex.Matcher;
@@ -47,15 +46,20 @@ public class UserServiceImpl implements UserService {
             throw new BadRequestException("Password no valido");
         }
 
-        User oldUser = userRepository.findByEmail(user.getEmail());
-        if(oldUser != null){
+        User oldUserEmail = userRepository.findByEmail(user.getEmail());
+        if(oldUserEmail != null){
             throw new BadRequestException("El correo ya existe");
         }
+        User oldUserUsername = userRepository.findByUsername(user.getUsername());
+        if(oldUserUsername != null){
+            throw new BadRequestException("El nombre de usuario ya existe");
+        }
+
         try {
             user.setPassword(this.getPasswordEncoded(user.getPassword()));
             userRepository.save(user);
         } catch(Exception e) {
-            throw new BadRequestException("datos incorrectos");
+            throw new BadRequestException("Datos incorrectos");
         }
         return user;
     }
@@ -63,6 +67,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getById(int userId) {
         return userRepository.findById(userId).orElseThrow(() -> new BadRequestException("No se ha encontrado el usuario"));
+    }
+
+    @Override
+    public Boolean isUsernameInUse(String username) {
+        User user = userRepository.findByUsername(username);
+        return user != null;
+    }
+
+    @Override
+    public Boolean isEmailInUse(String email) {
+        User user = userRepository.findByEmail(email);
+        return user != null;
     }
 
     private String getPasswordEncoded(String password) {
