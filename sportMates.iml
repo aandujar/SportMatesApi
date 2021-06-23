@@ -104,5 +104,6 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-context:5.3.7" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-expression:5.3.7" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.security:spring-security-crypto:5.5.0" level="project" />
+    <orderEntry type="library" name="Maven: commons-io:commons-io:2.8.0" level="project" />
   </component>
 </module>

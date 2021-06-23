@@ -1,13 +1,23 @@
 package com.sportMates.Service.Impl;
 
+import com.sportMates.Entities.ChangePassword;
 import com.sportMates.Entities.User;
 import com.sportMates.Exception.BadRequestException;
 import com.sportMates.Repository.UserRepository;
 import com.sportMates.Service.UserService;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.apache.commons.io.FileUtils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -55,6 +65,11 @@ public class UserServiceImpl implements UserService {
             throw new BadRequestException("El nombre de usuario ya existe");
         }
 
+        LocalDate now = LocalDate.now().withYear(LocalDateTime.now().getYear()-18);
+        if(now.compareTo(user.getBornDate())<=0){
+            throw new BadRequestException("Debes tener al menos 18 años para registrarte");
+        }
+
         try {
             user.setPassword(this.getPasswordEncoded(user.getPassword()));
             userRepository.save(user);
@@ -79,6 +94,35 @@ public class UserServiceImpl implements UserService {
     public Boolean isEmailInUse(String email) {
         User user = userRepository.findByEmail(email);
         return user != null;
+    }
+
+    @Override
+    public Boolean updateAvatar(String avatar, int userId) {
+        User user = this.getById(userId);
+        user.setAvatar(avatar);
+        userRepository.save(user);
+        return true;
+
+    }
+
+    @Override
+    public Boolean changePassword(ChangePassword changePassword, int userId) {
+        User user = this.getById(userId);
+        String currentPasswordEncripted = this.getPasswordEncoded(changePassword.getCurrent());
+        if(!this.isSameEncriptedPassword(changePassword.getCurrent(), user.getPassword())){
+            throw new BadRequestException("La contraseña actual no coincide");
+        }
+
+        Pattern validPassword = Pattern.compile("[A-Za-z\\d$@$!%*?&]{8,15}");
+        Matcher matcher = validPassword.matcher(changePassword.getNewP());
+        if(!matcher.find()) {
+            throw new BadRequestException("Nueva contraseña no valida");
+        }
+
+        user.setPassword(this.getPasswordEncoded(changePassword.getNewP()));
+        userRepository.save(user);
+
+        return true;
     }
 
     private String getPasswordEncoded(String password) {

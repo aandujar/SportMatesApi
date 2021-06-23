@@ -1,5 +1,6 @@
 package com.sportMates.Entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,5 +40,11 @@ public class User {
     private String password;
 
     @Column(name = "BORN_DATE")
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate bornDate;
+
+    @Column(name = "AVATAR")
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    private String avatar;
 }

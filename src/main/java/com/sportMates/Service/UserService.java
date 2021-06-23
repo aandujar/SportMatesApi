@@ -1,6 +1,8 @@
 package com.sportMates.Service;
 
+import com.sportMates.Entities.ChangePassword;
 import com.sportMates.Entities.User;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
 
@@ -13,4 +15,8 @@ public interface UserService {
     Boolean isUsernameInUse(String username);
 
     Boolean isEmailInUse(String email);
+
+    Boolean updateAvatar(String avatar, int userId);
+
+    Boolean changePassword(ChangePassword changePassword, int userId);
 }
