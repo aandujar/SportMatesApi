@@ -21,7 +21,8 @@ public class EventUserServiceImpl implements EventUserService {
     @Autowired
     private UserService userService;
 
-    private boolean isUserAddedToEvent(int eventId, int userId) {
+    @Override
+    public boolean isUserAddedToEvent(int eventId, int userId) {
         EventUser eventUser = eventUserRepository.findByEvent_IdAndUser_Id(eventId, userId);
         return eventUser != null;
     }
